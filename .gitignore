@@ -3,3 +3,4 @@ _*
 *.test
 .DS_Store
 main
+.idea

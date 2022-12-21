@@ -1,18 +1,18 @@
 # JQ-API
 
-[![Build Status](https://travis-ci.org/thecampagnards/jq-api.svg?branch=master)](https://travis-ci.org/thecampagnards/jq-api)
-[![Go Report Card](https://goreportcard.com/badge/github.com/thecampagnards/jq-api)](https://goreportcard.com/report/github.com/thecampagnards/jq-api)
-
 This web service get a json from an url then parse it with jq (check <https://github.com/stedolan/jq>).
-We use it for rundeck which accept specific json format.
 
 ## Installation
 
-Docker image available here <https://hub.docker.com/r/thecampagnards/jq-api/>.
-Run the service with this command:
+Build the service with this command:
 
 ```sh
-docker run -p 8080:8080 thecampagnards/jq-api
+docker build -t flyvolcano/jq-api .
+```
+
+and run the container:
+```sh
+docker run -p 8080:8080 flyvolcano/jq-api --restart unless-stopped
 ```
 
 ## Usage
@@ -27,6 +27,15 @@ The headers, body and request type used to request the api will be used to reque
 Example :
 
 ```bash
-curl 'http://localhost:8080?jq=.tags&url=https://mydockerregistry.com/v2/alpine/tags/list'
-> ["latest","v0.28.3"]
+curl 'http://localhost:8080/?jq=%22[.[]|{species:%20.[\%22Species%20Name\%22]}]%22&url=https://www.fishwatch.gov/api/species'
 ```
+
+## Reserved characters
+
+The `+` character which is used in jq is escaped by the query parameter. So as an alternative
+the `±` character is used which internally gets converted to `+` before passing into jq.
+
+## Improvements
+1. Handles `+` via `±` character
+2. Handles gziped responses
+3. Migrated from gopkg to go modules
