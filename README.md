@@ -4,7 +4,12 @@ This web service get a json from an url then parse it with jq (check <https://gi
 
 ## Installation
 
-Build the service with this command:
+run from registry
+```sh
+docker run -p 8080:8080 ghcr.io/flyvolcano/jq-api
+```
+
+(or) Build the service locally with this command:
 
 ```sh
 docker build -t flyvolcano/jq-api .
